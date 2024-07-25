@@ -9,7 +9,7 @@ const TodoListApp = () => {
   const [editingText, setEditingText] = useState('');
 
   useEffect(() => {
-  fetchTodos();
+  fetchTodos('/api/todos');
 }, []);
 
   const apiUrl ='http://localhost:5000/api/todos';

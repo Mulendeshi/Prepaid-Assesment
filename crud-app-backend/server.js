@@ -29,16 +29,20 @@ app.get('/api/todos', async (req, res) => {
 });
 
 app.post('/api/todos', async (req, res) => {
-  try {
-    const { text, completed } = req.body;
-    const newTodo = { text, completed };
-    const docRef = await todosCollection.add(newTodo);
-    const todo = { id: docRef.id, ...newTodo };
-    res.status(201).json(todo);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+    try {
+      const { text, completed } = req.body;
+      if (!text || typeof completed !== 'boolean') {
+        throw new Error('Invalid request body');
+      }
+      const newTodo = { text, completed };
+      const docRef = await todosCollection.add(newTodo);
+      const todo = { id: docRef.id, ...newTodo };
+      res.status(201).json(todo);
+    } catch (error) {
+      console.error('Error adding todo:', error);
+      res.status(400).json({ message: error.message });
+    }
+  });
 
 app.put('/api/todos/:id', async (req, res) => {
   try {
